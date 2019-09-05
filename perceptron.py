@@ -49,7 +49,7 @@ class Perceptron():
                        y,
                        W, 
                        b, 
-                       learn_rate = 0.01):
+                       learn_rate):
         for i in range(len(X)):
             y_hat = self.prediction(X[i], W, b)[0]
             if y[i]-y_hat == 1:
@@ -84,9 +84,14 @@ class Perceptron():
             lin_sep = np.array_equal(y_pred.reshape(len(self.y)), self.y)
             
             if lin_sep:
-                return True
+                break
         
-        return False
+        if i == num_epochs - 1:
+            output = False
+            
+        output = True
+        
+        return output
     
     def plot(self):
         
