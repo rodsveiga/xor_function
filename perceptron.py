@@ -20,6 +20,7 @@ class Perceptron():
         self.y = y
         
         self.boundary_lines = []
+        self.epoch_max = None
                  
         self.x_min= min(X.T[0])
         self.x_max= max(X.T[0])
@@ -69,7 +70,8 @@ class Perceptron():
     # and see your results plotted below.
     def train(self,
               learn_rate = 0.01, 
-              num_epochs = 10000):
+              num_epochs = 1000,
+              plot_lines= False):
 
         W = np.array(np.random.rand(len(self.X[0]),1))
         b = np.random.rand(1)[0] + self.x_max
@@ -77,7 +79,9 @@ class Perceptron():
         for i in range(num_epochs):
             # In each epoch, we apply the perceptron step.
             W, b = self.perceptronStep(self.X, self.y, W, b, learn_rate)
-            self.boundary_lines.append((-W[0]/W[1], -b/W[1]))
+            
+            if plot_lines:
+                self.boundary_lines.append((-W[0]/W[1], -b/W[1]))
         
             y_pred = self.prediction(self.X, W, b)
             
@@ -88,8 +92,10 @@ class Perceptron():
         
         if i == num_epochs - 1:
             output = False
+        else:
+            output = True
             
-        output = True
+        self.epoch_max = i
         
         return output
     
@@ -110,3 +116,6 @@ class Perceptron():
         plt.title('Solution Boundary')
 
         plt.show()
+        
+    def epoch_stop(self):
+        return self.epoch_max
