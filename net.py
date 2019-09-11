@@ -72,15 +72,18 @@ class NeuralNetwork:
                 self.weights = W
                 
         else:
-                
+            
             ## Perturbation over the cross weights
-            for layer in range(self.layers -1):
+            self.weights = []
+            for layer in range(self.layers - 2):
                 w_ = np.identity(net_arch[layer])
                 w_ = w_ + epsilon
                 bias = np.zeros([1, net_arch[layer]])
                 w_ = np.concatenate([w_, bias])       
                 self.weights.append(w_)
-                    
+                
+            self.weights.append(np.full((net_arch[layer+1] + 1, 1), epsilon) )
+                                    
     
     def _forward_prop(self, x):
         y = x
@@ -170,9 +173,9 @@ class NeuralNetwork:
         Z = np.concatenate((ones.T, data), axis=1)
         
         # Last layer
-        self.int_rep_.append(data)
+        #self.int_rep_.append(data)
         # All layers
-        #self.int_rep_.append(self.forward(data))
+        self.int_rep_.append(self.forward(data))
         
         self.saved_weights.append(self.weights)
         
